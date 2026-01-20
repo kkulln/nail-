@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>Nail et moi</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    /* ===== 全体 ===== */
+    body {
+      margin: 0;
+      font-family: "Georgia", serif;
+      color: #6a4a3c;
+      background-image: url("https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9");
+      background-size: cover;
+      background-position: center;
+    }
+
+    /* 背景を少し暗くする */
+    .overlay {
+      background: rgba(255, 255, 255, 0.75);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 20px;
+    }
+
+    h1 {
+      font-size: 48px;
+      margin-bottom: 10px;
+    }
+
+    p {
+      margin-bottom: 40px;
+      letter-spacing: 1px;
+    }
+
+    /* メニューボタン */
+    .menu {
+      display: flex;
+      gap: 24px;
+      margin-bottom: 40px;
+      flex-wrap: wrap;
+    }
+
+    .menu a {
+      text-decoration: none;
+      color: #6a4a3c;
+      font-size: 14px;
+    }
+
+    /* BOOK NOW */
+    .book-btn {
+      text-decoration: none;
+      background: #6a4a3c;
+      color: #fff;
+      padding: 14px 36px;
+      border-radius: 999px;
+      letter-spacing: 2px;
+    }
+
+    .book-btn:hover {
+      opacity: 0.8;
+    }
+
+    /* スマホ */
+    @media (max-width: 480px) {
+      h1 {
+        font-size: 32px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="overlay">
+    <h1>Nail et moi</h1>
+    <p>Your own kind of special, right at your fingertips.</p>
+
+    <!-- メニュー -->
+    <div class="menu">
+      <a href="reservation.html?menu=foot">FOOT NAIL</a>
+      <a href="reservation.html?menu=gel">GEL NAIL</a>
+      <a href="reservation.html?menu=christmas">CHRISTMAS NAIL</a>
+    </div>
+
+    <!-- 予約ボタン -->
+    <a href="reservation.html" class="book-btn">BOOK NOW</a>
+  </div>
+</body>
+</html>
