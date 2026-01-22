@@ -81,11 +81,10 @@
     <div class="container">
       <h1>Reservation</h1>
 
-      <form>
-        <!-- メニュー -->
+      <form id="reserveForm">
         <div>
           <label>メニュー</label>
-          <select id="menu">
+          <select id="menu" name="menu" required>
             <option value="">選択してください</option>
             <option value="foot">FOOT NAIL</option>
             <option value="gel">GEL NAIL</option>
@@ -95,27 +94,27 @@
 
         <div>
           <label>お名前</label>
-          <input type="text" required>
+          <input type="text" name="name" required>
         </div>
 
         <div>
           <label>メール</label>
-          <input type="email" required>
+          <input type="email" name="email" required>
         </div>
 
         <div>
           <label>希望日</label>
-          <input type="date" required>
+          <input type="date" name="date" required>
         </div>
 
         <div>
           <label>希望時間</label>
-          <input type="time" required>
+          <input type="time" name="time" required>
         </div>
 
         <div>
           <label>メッセージ</label>
-          <textarea></textarea>
+          <textarea name="message"></textarea>
         </div>
 
         <button type="submit">予約する</button>
@@ -123,14 +122,46 @@
     </div>
   </div>
 
-  <!-- index.htmlから渡されたメニューを自動選択 -->
+  <!-- index.html から渡されたメニューを反映 -->
   <script>
     const params = new URLSearchParams(window.location.search);
     const menu = params.get("menu");
-
     if (menu) {
       document.getElementById("menu").value = menu;
     }
+  </script>
+
+  <!-- Python（Colab）へ送信 -->
+  <script>
+    document.getElementById("reserveForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+
+      const formData = new FormData(this);
+
+      fetch("https://thin-geese-cover.loca.lt/reserve", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          menu: formData.get("menu"),
+          name: formData.get("name"),
+          email: formData.get("email"),
+          date: formData.get("date"),
+          time: formData.get("time"),
+          message: formData.get("message")
+        })
+      })
+      .then(res => res.json())
+      .then(data => {
+        alert("予約完了しました！");
+        this.reset();
+      })
+      .catch(err => {
+        alert("送信エラーが発生しました");
+        console.error(err);
+      });
+    });
   </script>
 </body>
 </html>
