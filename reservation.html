@@ -1,33 +1,40 @@
-<script>
-document.getElementById("reserveForm").addEventListener("submit", function(e) {
-  e.preventDefault();
+from flask import Flask, request, jsonify
+from flask_cors import CORS
+from datetime import datetime
 
-  const formData = new FormData(this);
+app = Flask(__name__)
 
-  fetch("https://gentle-radios-train.loca.lt/reserve", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({
-      menu: formData.get("menu"),
-      name: formData.get("name"),
-      email: formData.get("email"),
-      date: formData.get("date"),
-      time: formData.get("time"),
-      message: formData.get("message")
+CORS(app, resources={r"/*": {"origins": "*"}})
+
+reservations = []
+
+@app.route("/reserve", methods=["POST", "OPTIONS"])
+def reserve():
+    data = request.get_json(force=True)
+
+    reservation = {
+        "menu": data.get("menu"),
+        "name": data.get("name"),
+        "email": data.get("email"),
+        "date": data.get("date"),
+        "time": data.get("time"),
+        "message": data.get("message"),
+        "created_at": datetime.now().isoformat()
+    }
+
+    reservations.append(reservation)
+
+    return jsonify({
+        "status": "success",
+        "reservation": reservation
     })
-  })
-  .then(res => res.json())
-  .then(data => {
-    alert("予約完了しました！");
-    this.reset();
-  })
-  .catch(err => {
-    alert("送信エラー");
-    console.error(err);
-  });
-});
-</script>
 
+@app.route("/reservations", methods=["GET"])
+def get_reservations():
+    return jsonify(reservations)
 
+@app.route("/")
+def home():
+    return "Reservation server running"
+
+app.run(host="0.0.0.0", port=5000)
