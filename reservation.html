@@ -1,40 +1,136 @@
-from flask import Flask, request, jsonify
-from flask_cors import CORS
-from datetime import datetime
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>Reservation | Nail et moi</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-app = Flask(__name__)
-
-CORS(app, resources={r"/*": {"origins": "*"}})
-
-reservations = []
-
-@app.route("/reserve", methods=["POST", "OPTIONS"])
-def reserve():
-    data = request.get_json(force=True)
-
-    reservation = {
-        "menu": data.get("menu"),
-        "name": data.get("name"),
-        "email": data.get("email"),
-        "date": data.get("date"),
-        "time": data.get("time"),
-        "message": data.get("message"),
-        "created_at": datetime.now().isoformat()
+  <style>
+    body {
+      margin: 0;
+      font-family: "Georgia", serif;
+      background-image: url("https://images.unsplash.com/photo-1519415943484-9fa1873496d4");
+      background-size: cover;
+      background-position: center;
     }
 
-    reservations.append(reservation)
+    .overlay {
+      min-height: 100vh;
+      background: rgba(255, 255, 255, 0.8);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
 
-    return jsonify({
-        "status": "success",
-        "reservation": reservation
-    })
+    .container {
+      background: #fff;
+      max-width: 500px;
+      width: 100%;
+      padding: 24px;
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    }
 
-@app.route("/reservations", methods=["GET"])
-def get_reservations():
-    return jsonify(reservations)
+    h1 {
+      text-align: center;
+      margin-bottom: 24px;
+    }
 
-@app.route("/")
-def home():
-    return "Reservation server running"
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
 
-app.run(host="0.0.0.0", port=5000)
+    label {
+      font-size: 14px;
+    }
+
+    input, select, textarea {
+      padding: 12px;
+      font-size: 14px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+
+    button {
+      margin-top: 10px;
+      padding: 14px;
+      background: #6a4a3c;
+      color: #fff;
+      border: none;
+      border-radius: 999px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      opacity: 0.8;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="overlay">
+    <div class="container">
+      <h1>Reservation</h1>
+
+      <form>
+        <!-- メニュー -->
+        <div>
+          <label>メニュー</label>
+          <select id="menu">
+            <option value="">選択してください</option>
+            <option value="foot">FOOT NAIL</option>
+            <option value="gel">GEL NAIL</option>
+            <option value="christmas">CHRISTMAS NAIL</option>
+          </select>
+        </div>
+
+        <div>
+          <label>お名前</label>
+          <input type="text" required>
+        </div>
+
+        <div>
+          <label>メール</label>
+          <input type="email" required>
+        </div>
+
+        <div>
+          <label>希望日</label>
+          <input type="date" required>
+        </div>
+
+        <div>
+          <label>希望時間</label>
+          <input type="time" required>
+        </div>
+
+        <div>
+          <label>メッセージ</label>
+          <textarea></textarea>
+        </div>
+
+        <button type="submit">予約する</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- index.htmlから渡されたメニューを自動選択 -->
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const menu = params.get("menu");
+
+    if (menu) {
+      document.getElementById("menu").value = menu;
+    }
+  </script>
+</body>
+</html>
