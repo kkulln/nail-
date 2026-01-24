@@ -1,168 +1,33 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-  <meta charset="UTF-8">
-  <title>Reservation | Nail et moi</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script>
+document.querySelector("form").addEventListener("submit", async function(e) {
+  e.preventDefault();
 
-  <style>
-    body {
-      margin: 0;
-      font-family: "Georgia", serif;
-      background-image: url("https://images.unsplash.com/photo-1519415943484-9fa1873496d4");
-      background-size: cover;
-      background-position: center;
-    }
+  const data = {
+    menu: document.getElementById("menu").value,
+    name: document.querySelector("input[type='text']").value,
+    email: document.querySelector("input[type='email']").value,
+    date: document.querySelector("input[type='date']").value,
+    time: document.querySelector("input[type='time']").value,
+    message: document.querySelector("textarea").value
+  };
 
-    .overlay {
-      min-height: 100vh;
-      background: rgba(255, 255, 255, 0.8);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 20px;
-    }
-
-    .container {
-      background: #fff;
-      max-width: 500px;
-      width: 100%;
-      padding: 24px;
-      border-radius: 16px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-    }
-
-    h1 {
-      text-align: center;
-      margin-bottom: 24px;
-    }
-
-    form {
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-    }
-
-    label {
-      font-size: 14px;
-    }
-
-    input, select, textarea {
-      padding: 12px;
-      font-size: 14px;
-      border-radius: 8px;
-      border: 1px solid #ccc;
-    }
-
-    textarea {
-      resize: vertical;
-      min-height: 80px;
-    }
-
-    button {
-      margin-top: 10px;
-      padding: 14px;
-      background: #6a4a3c;
-      color: #fff;
-      border: none;
-      border-radius: 999px;
-      font-size: 16px;
-      cursor: pointer;
-    }
-
-    button:hover {
-      opacity: 0.8;
-    }
-  </style>
-</head>
-
-<body>
-  <div class="overlay">
-    <div class="container">
-      <h1>Reservation</h1>
-
-      <form id="reserveForm">
-        <div>
-          <label>メニュー</label>
-          <select id="menu" name="menu" required>
-            <option value="">選択してください</option>
-            <option value="foot">FOOT NAIL</option>
-            <option value="gel">GEL NAIL</option>
-            <option value="christmas">CHRISTMAS NAIL</option>
-          </select>
-        </div>
-
-        <div>
-          <label>お名前</label>
-          <input type="text" name="name" required>
-        </div>
-
-        <div>
-          <label>メール</label>
-          <input type="email" name="email" required>
-        </div>
-
-        <div>
-          <label>希望日</label>
-          <input type="date" name="date" required>
-        </div>
-
-        <div>
-          <label>希望時間</label>
-          <input type="time" name="time" required>
-        </div>
-
-        <div>
-          <label>メッセージ</label>
-          <textarea name="message"></textarea>
-        </div>
-
-        <button type="submit">予約する</button>
-      </form>
-    </div>
-  </div>
-
-  <!-- index.html から渡されたメニューを反映 -->
-  <script>
-    const params = new URLSearchParams(window.location.search);
-    const menu = params.get("menu");
-    if (menu) {
-      document.getElementById("menu").value = menu;
-    }
-  </script>
-
-  <!-- Python（Colab）へ送信 -->
-  <script>
-    document.getElementById("reserveForm").addEventListener("submit", function(e) {
-      e.preventDefault();
-
-      const formData = new FormData(this);
-
-      fetch("https://gentle-radios-train.loca.lt/reserve", {
-
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          menu: formData.get("menu"),
-          name: formData.get("name"),
-          email: formData.get("email"),
-          date: formData.get("date"),
-          time: formData.get("time"),
-          message: formData.get("message")
-        })
-      })
-      .then(res => res.json())
-      .then(data => {
-        alert("予約完了しました！");
-        this.reset();
-      })
-      .catch(err => {
-        alert("送信エラーが発生しました");
-        console.error(err);
-      });
+  try {
+    const res = await fetch("https://every-years-join.loca.lt/reserve", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(data)
     });
-  </script>
-</body>
-</html>
+
+    const result = await res.json();
+    alert("予約完了しました！");
+    console.log(result);
+
+  } catch (err) {
+    console.error(err);
+    alert("送信エラー");
+  }
+});
+</script>
+
