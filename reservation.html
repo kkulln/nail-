@@ -1,33 +1,33 @@
 <script>
-document.querySelector("form").addEventListener("submit", async function(e) {
+document.getElementById("reserveForm").addEventListener("submit", function(e) {
   e.preventDefault();
 
-  const data = {
-    menu: document.getElementById("menu").value,
-    name: document.querySelector("input[type='text']").value,
-    email: document.querySelector("input[type='email']").value,
-    date: document.querySelector("input[type='date']").value,
-    time: document.querySelector("input[type='time']").value,
-    message: document.querySelector("textarea").value
-  };
+  const formData = new FormData(this);
 
-  try {
-    const res = await fetch("https://every-years-join.loca.lt/reserve", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(data)
-    });
-
-    const result = await res.json();
+  fetch("https://gentle-radios-train.loca.lt/reserve", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      menu: formData.get("menu"),
+      name: formData.get("name"),
+      email: formData.get("email"),
+      date: formData.get("date"),
+      time: formData.get("time"),
+      message: formData.get("message")
+    })
+  })
+  .then(res => res.json())
+  .then(data => {
     alert("予約完了しました！");
-    console.log(result);
-
-  } catch (err) {
-    console.error(err);
+    this.reset();
+  })
+  .catch(err => {
     alert("送信エラー");
-  }
+    console.error(err);
+  });
 });
 </script>
+
 
